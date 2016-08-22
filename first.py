@@ -4,6 +4,7 @@ import re
 
 
 class CSSRectifierFinderError(Exception):
+    # собственная ошибка, которая возникает при неправильном поиске.
     pass
 
 
