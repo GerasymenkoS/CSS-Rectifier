@@ -422,6 +422,7 @@ class Finder:
         # :disabled и :enabled
         # ::-moz - placeholder ::-webkit - input - placeholder
         # :optional и :required
+        # ::selection
         if alone_selector[1].find('read-write') >= 0:
             Finder.find_easy_not_ignore_pseudo_helper(alone_selector, combo_selector,
                                                       html_file_as_string, 'readonly', [-1])
