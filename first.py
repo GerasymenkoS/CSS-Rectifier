@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
 import sys
 import os
 import re
+import time
+start_time = time.time()
 
 
 class CSSRectifierFinderError(Exception):
@@ -921,3 +924,5 @@ if __name__ == '__main__':
 
     for selector in test_rectifier.css_selectors:
         print(str(selector) + ' ' + str(selector.usage) + ' ' + (str(selector.alone_selectors)))
+
+    print("--- %s seconds ---" % (time.time() - start_time))
