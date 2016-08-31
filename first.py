@@ -777,6 +777,8 @@ class Finder:
                             if find_id is not False and find.find(find_id) > 0:
                                 if multiple is True:
                                     return True
+                                elif return_find is True:
+                                    return find
                                 else:
                                     combo_selector.usage = True
                 elif alone_selector.find('.') > 0:
@@ -787,6 +789,8 @@ class Finder:
                         if find_class is not False and find.find(find_class) > 0:
                             if multiple is True:
                                 return True
+                            elif return_find is True:
+                                return find
                             else:
                                 combo_selector.usage = True
         else:
@@ -1054,7 +1058,9 @@ class Finder:
                             break
                         greater = True
                     del fake_combo_selector
-
+            if False in results_with_plus or False in results_with_gr:
+                if str(combo_selector) not in list_to_output:
+                    list_to_output.append(str(combo_selector))
         if False not in results and False not in results_with_plus and False not in results_with_gr:
             combo_selector.usage = True
 
@@ -1528,16 +1534,18 @@ class CSSRectifier:
 
 if __name__ == '__main__':
     sys.setrecursionlimit(10000)
-    project_dir = '/home/incode7/Desktop/TheRealGleb'
-    # project_dir = '/home/incode7/Desktop/1111'
+    # project_dir = '/home/incode7/Desktop/TheRealGleb'
+    project_dir = '/home/incode7/Desktop/dist'
     list_to_output = list()
 
     test_rectifier = CSSRectifier()
     test_rectifier.do_rectifier(project_dir)
 
     print('_______________________________________________________________________________________________')
-    for selector in test_rectifier.css_selectors:
-        if selector.usage is False:
-            print(str(selector) + ' ' + str(selector.usage) + ' '
-                  + (str(selector.alone_selectors)) + str(selector.files))
+    # for selector in test_rectifier.css_selectors:
+    #     if selector.usage is False:
+    #         print(str(selector) + ' ' + str(selector.usage) + ' '
+    #               + (str(selector.alone_selectors)) + str(selector.files))
+    for item_ in list_to_output:
+        print(item_)
     print("--- %s seconds ---" % (time.time() - start_time))
