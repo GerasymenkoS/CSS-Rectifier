@@ -194,6 +194,7 @@ class Finder:
                         return True
         if return_findall is True:
             return findall_list
+
         return False
 
     @staticmethod
@@ -908,7 +909,7 @@ class Finder:
                                     return Finder.find_class_selector(alone_selector.name[1:],
                                                                       html_file_as_string, return_findall=True)
                                 else:
-                                    if usage is True:
+                                    if usage:
                                         combo_selector.usage = True
 
                             elif alone_selector.name[0] == '#':
@@ -1527,7 +1528,7 @@ class CSSRectifier:
         for html_file in self.create_html_files():
             with open(html_file.path) as html:
                 html = html.read().replace('\t', '').replace('\n', '')
-                html = html.replace(re.search(u'<head>(.+?)</head>', html).group(), '')
+                # html = html.replace(re.search(u'<head>(.+?)</head>', html).group(), '')
                 for combo_selector in self.css_selectors:
                     Finder.find_selectors_in_html(html, combo_selector)
 
@@ -1535,17 +1536,17 @@ class CSSRectifier:
 if __name__ == '__main__':
     sys.setrecursionlimit(10000)
     # project_dir = '/home/incode7/Desktop/TheRealGleb'
-    project_dir = '/home/incode7/Desktop/dist'
+    project_dir = '/home/incode7/Desktop/TheRealGleb'
     list_to_output = list()
 
     test_rectifier = CSSRectifier()
     test_rectifier.do_rectifier(project_dir)
 
     print('_______________________________________________________________________________________________')
-    # for selector in test_rectifier.css_selectors:
-    #     if selector.usage is False:
-    #         print(str(selector) + ' ' + str(selector.usage) + ' '
-    #               + (str(selector.alone_selectors)) + str(selector.files))
-    for item_ in list_to_output:
-        print(item_)
+    for selector in test_rectifier.css_selectors:
+        if selector.usage is False:
+            print(str(selector) + ' ' + str(selector.usage) + ' '
+                  + (str(selector.alone_selectors)) + str(selector.files))
+    # for item_ in list_to_output:
+    #     print(item_)
     print("--- %s seconds ---" % (time.time() - start_time))
