@@ -3,6 +3,8 @@ import sys
 import os
 import re
 import time
+import jinja2
+
 start_time = time.time()
 
 
@@ -1289,7 +1291,8 @@ class CSSSelector:
         self.usage = True
 
     def add_file(self, file):
-        self.files.append(file)
+        if file not in self.files:
+            self.files.append(file)
 
     def add_selector(self, selector_to_add):
         if selector_to_add != '':
@@ -1615,6 +1618,98 @@ class CSSRectifier:
                                 % str(round(len(usage_selectors)/len(self.css_selectors) * 100, 2)) \
                                 + '%'
 
+
+class RectifilerReport:
+    def __init__(self, **kwargs):
+        name_report_file = 'Report file from CSS Rectifiler.html'
+        report_file = open(report_path + '/' + name_report_file, 'w+')
+
+        # report_file.close()
+        template = """
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <title>CSS Rectifiler report</title>
+                <style type="text/css">
+                   table, legend, p {
+                       margin: 0 auto;
+                   }
+                   table {
+                    border: 2px solid black;
+                   }
+                   td {
+                       text-align: center;
+                   }
+                </style>
+            </head>
+            <body  class="text-center">
+                <table>
+                    <legend>Report from CSS Rectifiler.<br>All not used selectors.</legend>
+                    <tr>
+                        <th>Num.</th>
+                        <th>Name of selector</th>
+                        <th>CSS File</th>
+                        <th>Line on CSS File</th>
+                        <th>Used kind of selector</th>
+                        <th>Html file where used <br> kind of selector</th>
+                    </tr>
+                    {% for selector in selectors %}
+                        <tr>
+                            <td colspan="6">
+                                <hr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ selector.name }}</td>
+                            <td>
+                                {% for file in selector.files %}
+                                    {% if not loop.last %}
+                                        {{ file.name }},
+                                    {% else %}
+                                        {{ file.name }}.
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {%for line in selector.lines %}
+                                    {% if not loop.last %}
+                                        {{ line }},
+                                    {% else %}
+                                        {{ line }}.
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            {% for alone_selector in selector.alone_selectors %}
+                                {% if alone_selector.alone_usage %}
+                                    <td>
+                                        {{ alone_selector.name }}
+                                    </td>
+                                    <td>
+                                        {% for usage_file in alone_selector.usage_files %}
+                                            {{ usage_file.name }}
+                                        {% endfor %}
+                                    </td>
+                                {% else %}
+                                    <td> - </td>
+                                    <td> - </td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+                <p>Percent of usage: {{ percent }}</p>
+            </body>
+        </html>
+        """
+
+        self.template = jinja2.Template(template)
+        self.template.stream({
+            'percent': kwargs['percent'],
+            'selectors': kwargs['selectors']
+        }).dump(report_file)
+
+
 if __name__ == '__main__':
     sys.setrecursionlimit(10000)
     report_path, project_dir = os.getcwd(), os.getcwd()
@@ -1629,6 +1724,7 @@ if __name__ == '__main__':
                     project_dir = project_dir[:-1]
         except IndexError:
             pass
+
     if '--report' in args:
         report = True
         try:
@@ -1646,14 +1742,10 @@ if __name__ == '__main__':
     rectifier = CSSRectifier()
     rectifier.do_rectifier(project_dir)
 
-    print('_______________________________________________________________________________________________')
-    for selector in rectifier.css_selectors:
-        if selector.usage is False:
-            print(str(selector) + ' ' + str(selector.usage) + ' '
-                  + (str(selector.alone_selectors)) + str(selector.files))
-    print(rectifier.percent_of_usage)
-    # for item_ in list_to_output:
-    #     print(item_)
     if report:
         rectifier.do_report()
+    report = RectifilerReport(
+        percent=rectifier.percent_of_usage,
+        selectors=rectifier.css_selectors
+    )
     print("--- %s seconds ---" % (time.time() - start_time))
