@@ -1,6 +1,7 @@
 import sys
 import subprocess
 import jinja2
+import os
 from rectifiler import BASEDIR, report_path
 
 
@@ -30,7 +31,7 @@ class RectifilerReport:
     @staticmethod
     def open_file(filename):
         if sys.platform == "win32":
-            # os.startfile(filename)
+            os.startfile(filename)
             pass
         else:
             opener = "open" if sys.platform == "darwin" else "xdg-open"
