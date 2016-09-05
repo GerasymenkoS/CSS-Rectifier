@@ -1238,19 +1238,16 @@ class HTMLFile(MyFile):
         optional_tags = frozenset(optional_tags)
         opened_tags_count, closed_tags_count = 0, 0
 
-        for find in re.findall(u"<[^/][^>]+>", html_file_as_string):
+        for find in re.findall(u"<.*?>", html_file_as_string):
             if find.find('<!') == 0:
-                continue
+                    continue
             else:
-                if find.split(' ')[0][1:].replace('>', '') not in optional_tags:
-                    opened_tags_count += 1
-
-        for find in re.findall(u'</[^>]+>', html_file_as_string):
-            if find.find('<!') == 0:
-                continue
-            else:
-                if find.split(' ')[0][2:].replace('>', '') not in optional_tags:
-                    closed_tags_count += 1
+                if find.count('</') == 1:
+                    if find.split(' ')[0][2:].replace('>', '') not in optional_tags:
+                        closed_tags_count += 1
+                else:
+                    if find.split(' ')[0][1:].replace('>', '') not in optional_tags:
+                        opened_tags_count += 1
 
         if opened_tags_count == closed_tags_count:
             self.opened_and_closed_tags_check = True
@@ -1615,7 +1612,8 @@ class CSSRectifier:
                 not_used_selectors.append(not_used_selector)
         RectifilerReport(
             percent=self.percent_of_usage,
-            selectors=not_used_selectors
+            selectors=not_used_selectors,
+            html_files=self.html_files
         )
 
     def calculate_percent_of_usage(self):
@@ -1636,7 +1634,8 @@ class RectifilerReport:
             self.template = self.env.get_template('report_template.html').render(
                 {
                     'percent': kwargs['percent'],
-                    'selectors': kwargs['selectors']
+                    'selectors': kwargs['selectors'],
+                    'html_files': kwargs['html_files']
                 }
             )
             self.create_report()
@@ -1646,10 +1645,9 @@ class RectifilerReport:
 
     def create_report(self):
         name_report_file = report_path + '/' + 'Report file from CSS Rectifiler.html'
-        report_file = open(name_report_file, 'w+')
-        report_file.write(self.template)
-
-        self.open_file(name_report_file)
+        with open(name_report_file, 'w+') as report_file:
+            report_file.write(self.template)
+            self.open_file(name_report_file)
 
     @staticmethod
     def open_file(filename):
@@ -1662,6 +1660,7 @@ class RectifilerReport:
 
 if __name__ == '__main__':
     sys.setrecursionlimit(10000)
+
     BASEDIR = os.path.dirname(
         os.path.realpath(sys.argv[0])
     )
