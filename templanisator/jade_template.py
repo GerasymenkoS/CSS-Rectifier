@@ -110,8 +110,6 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
                 not_alone_files.append(file)
             try:
                 file.string_version = pyjade.simple_convert(file.string_version)
-                print(file.string_version)
-                print('_______________________________________________________________________')
             except Exception as e:
                 print('Error in %s file. "%s"' % (file.name, e))
                 exit()
