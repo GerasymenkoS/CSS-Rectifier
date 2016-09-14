@@ -2,7 +2,6 @@ import sys
 import subprocess
 import jinja2
 import os
-import rectifiler
 
 BASEDIR = os.path.dirname(
         os.path.realpath(sys.argv[0])
@@ -10,9 +9,8 @@ BASEDIR = os.path.dirname(
 
 try:
     report_path = os.path.realpath(sys.argv[sys.argv.index('--report') + 1])
-except Exception:
+except IndexError:
     report_path = os.getcwd()
-    pass
 
 
 class RectifilerReport:
@@ -42,7 +40,6 @@ class RectifilerReport:
     def open_file(filename):
         if sys.platform == "win32":
             os.startfile(filename)
-            pass
         else:
             opener = "open" if sys.platform == "darwin" else "xdg-open"
             subprocess.call([opener, filename])

@@ -67,8 +67,8 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
                                         for each in included_file:
                                             file.add_include(each, find)
                                     else:
-                                        html_with_jade_files_for_include\
-                                            .pop(html_with_jade_files_for_include.index(included_file))
+                                        # html_with_jade_files_for_include\
+                                        #     .pop(html_with_jade_files_for_include.index(included_file))
                                         file.add_include(included_file, find)
 
             else:
@@ -87,6 +87,7 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
                     try:
                         file.string_version = file.string_version.replace(include[1],
                                                                           include[0].string_version + '\n', 1)
+
                     except AttributeError:
                         file.string_version = file.string_version.replace(include[1], '\n', 1)
 
@@ -97,6 +98,7 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
                         not_alone_files.append(file)
                     if include[0] not in not_alone_files:
                         not_alone_files.append(include[0])
+
         for file in html_with_jade_files:
             if file.base is False:
                 if file.extention == 'jade' and file.string_version.find('extends') == 0:
@@ -108,8 +110,10 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
                 not_alone_files.append(file)
             try:
                 file.string_version = pyjade.simple_convert(file.string_version)
+                print(file.string_version)
+                print('_______________________________________________________________________')
             except Exception as e:
-                print(e)
+                print('Error in %s file. "%s"' % (file.name, e))
                 exit()
 
         for file in html_with_jade_files:
@@ -141,6 +145,8 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
                         stars_files.append(file)
         if star:
             return stars_files
+        print('Included file %s does not exist.' % name_of_file)
+        exit()
 
     def template_check_helper(self, find):
         pass

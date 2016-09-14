@@ -143,8 +143,8 @@ class JadeFile(MyFile, WEBFile):
                     new_includes.append(
                         (each[0], each[1].replace('*', each[0].name))
                     )
-
-        self.includes = new_includes
+        if len(new_includes) > 0:
+            self.includes = new_includes
 
     def __str__(self):
         return 'JadeFile ' + self.name
