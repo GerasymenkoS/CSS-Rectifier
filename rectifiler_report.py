@@ -11,7 +11,8 @@ try:
     report_path = os.path.realpath(sys.argv[sys.argv.index('--report') + 1])
 except IndexError:
     report_path = os.getcwd()
-
+except ValueError:
+    pass
 
 class RectifilerReport:
     def __init__(self, **kwargs):

@@ -52,10 +52,26 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
                                     )
                                 else:
                                     if include[1][-1] == '*' and include[1].find('*.*') == -1:
-                                        included_file = self.get_file_to_include(
-                                            html_with_jade_files_for_include, os.path.dirname(file.path)
-                                            + '/' + str(include[1])
-                                        )
+                                        new_included_file = list()
+                                        if include[1].find('/**/') > 0:
+                                            for i in os.listdir(os.path.dirname(file.path) + '/' +
+                                                                        str(include[1].split('/**/')[0])):
+                                                if os.path.isdir(os.path.dirname(file.path) + '/' +
+                                                                         str(include[1].split('/**/')[0]) + '/' + i):
+                                                    included_file = self.get_file_to_include(
+                                                        html_with_jade_files_for_include, os.path.dirname(file.path)
+                                                        + '/' + str(include[1].split('/**/')[0])
+                                                        + '/' + i
+                                                        + '/' + str(include[1].split('/**/')[1])
+                                                    )
+                                                    for inc_file in included_file:
+                                                        new_included_file.append(inc_file)
+                                            included_file = new_included_file
+                                        else:
+                                            included_file = self.get_file_to_include(
+                                                html_with_jade_files_for_include, os.path.dirname(file.path)
+                                                + '/' + str(include[1])
+                                            )
                                     else:
                                         if include[1].find('*.*') > 0:
                                             included_file = self.get_file_to_include(
@@ -93,7 +109,6 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
                     try:
                         file.string_version = file.string_version.replace(include[1],
                                                                           include[0].string_version + '\n', 1)
-
                     except AttributeError:
                         file.string_version = file.string_version.replace(include[1], '\n', 1)
 
