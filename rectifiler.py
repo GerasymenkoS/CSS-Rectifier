@@ -213,6 +213,7 @@ class CSSRectifier:
     def create_html_files(self):
         self.html_files = [files.HTMLFile(file.path) for file in self.get_html_files()]
         if template:
+            print('Do Template Processor...')
             if template == 'jinja2':
                 self.html_files = jinja_.Jinja2TemplateProcessor().do_template_processor(self.html_files)
             elif template == 'jade':
