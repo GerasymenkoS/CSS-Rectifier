@@ -62,7 +62,7 @@ class Jinja2TemplateProcessor(abc_temp.AbstractTemplate):
 
     def get_file_to_include(self, html_files, name_of_file):
         for html_file in html_files:
-            if html_file.name == name_of_file:
+            if html_file.path == name_of_file:
                 return html_file
         raise FileExistsError
 

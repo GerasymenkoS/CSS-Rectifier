@@ -23,12 +23,17 @@ class JSPTemplateProcessor(abstract_template.AbstractTemplate):
         for html_file in html_files:
             if html_file.extention == "html" and html_file.includes:
                 for include_string in html_file.includes.split(', '):
+                    include_strings = ""
                     for i in super().path_generator(html_file.path, self.template_check_helper(
                             include_string.replace('"', "'"))):
                         include_file = self.get_file_to_include(html_files, i.__str__())
                         include_list.append(include_file.name)
-                        html_file.string_version = html_file.string_version.replace(include_string,
-                                                                                    include_file.string_version)
+                        include_strings += include_file.string_version
+                    html_file.string_version = html_file.string_version.replace(include_string,
+                                                                                include_strings)
+        for html_file in html_files:
+            if html_file.name == 'main_ver_2.html':
+                print(html_file.string_version)
         return [html_file for html_file in html_files if html_file.name not in include_list]
 
     def get_file_to_include(self, html_files, name_of_file):
