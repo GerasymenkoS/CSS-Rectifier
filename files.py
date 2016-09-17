@@ -114,7 +114,7 @@ class JadeFile(MyFile, WEBFile):
         self.base = False
         if self.base_name != '':
             str_with_extend = re.search(u'{% extend.*?%}', self.string_version).group()
-            if os.path.basename(self.base_name).find('.') < 0:
+            if os.path.basename(self.base_name).find('.') == -1:
                 new_base_name = self.base_name + '.jade'
                 new_str_with_extend = str_with_extend.replace(self.base_name, new_base_name)
                 self.string_version = self.string_version.replace(str_with_extend, new_str_with_extend)
@@ -125,8 +125,8 @@ class JadeFile(MyFile, WEBFile):
 
     def check_star(self):
         includes = ''
-        new_includes = list()
-        includes_names = list()
+        new_includes, includes_names = list(), list()
+
         for each in self.string_version.split('\n'):
             if each.find('include') >= 0 and each.find('*') > 0:
                 tab = each.count('\t')

@@ -89,8 +89,6 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
                                         for each in included_file:
                                             file.add_include(each, find)
                                     else:
-                                        # html_with_jade_files_for_include\
-                                        #     .pop(html_with_jade_files_for_include.index(included_file))
                                         file.add_include(included_file, find)
 
             else:
