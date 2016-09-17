@@ -206,7 +206,7 @@ class CSSRectifier:
                 self.html_files = jinja_.Jinja2TemplateProcessor().do_template_processor(self.html_files)
             elif template == 'jade':
                 self.html_files = jade_.JadeTemplateProcessor().do_template_processor(
-                    self.html_files + [files.JSPFile(file.path) for file in self.get_some_files('jsp')]
+                    self.html_files + [files.JadeFile(file.path) for file in self.get_some_files('jade')]
                 )
             elif template == "jsp":
                 self.html_files = jsp_.JSPTemplateProcessor().do_template_processor(
