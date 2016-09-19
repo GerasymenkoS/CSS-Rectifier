@@ -31,9 +31,9 @@ class JSPTemplateProcessor(abstract_template.AbstractTemplate):
                         include_strings += include_file.string_version
                     html_file.string_version = html_file.string_version.replace(include_string,
                                                                                 include_strings)
-        for html_file in html_files:
-            if html_file.name == 'main_ver_2.html':
-                print(html_file.string_version)
+        for file in html_files:
+            if re.search(u'<%@ include[^>]+%>', file.string_version):
+                html_files = self.do_template_processor(html_files)
         return [html_file for html_file in html_files if html_file.name not in include_list]
 
     def get_file_to_include(self, html_files, name_of_file):
