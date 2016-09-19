@@ -34,6 +34,7 @@ class JSPTemplateProcessor(abstract_template.AbstractTemplate):
         for file in html_files:
             if re.search(u'<%@ include[^>]+%>', file.string_version):
                 html_files = self.do_template_processor(html_files)
+                break
         return [html_file for html_file in html_files if html_file.name not in include_list]
 
     def get_file_to_include(self, html_files, name_of_file):
