@@ -1126,6 +1126,7 @@ class Finder:
                         re.match(u'</[^>]+>', str_to_search_begin).group(), ''
                     )
                     str_to_search_end = '</%s>' % str_to_search_begin[1:]
+
                 if str_to_search_end.count('>') > 1:
                     str_to_search_end = str_to_search_end[:-1]
 
@@ -1153,7 +1154,11 @@ class Finder:
                                     str_to_search = second_find
                                     loop = False
                                     break
-                                str_to_search = second_find
+                                if second_find.find(str_to_search) == 0:
+                                    str_to_search = second_find
+                                else:
+                                    continue
+
                             if loop is False:
                                 break
                             broken_loop += 1
