@@ -221,7 +221,6 @@ class CSSRectifier:
         print('Start find selectors....')
         for html_file in self.create_html_files():
             html_file.check_tags(html_file.string_version)
-            
             for combo_selector in self.css_selectors:
                 try:
                     static_classes.Finder.find_selectors_in_html(html_file.string_version, combo_selector)
