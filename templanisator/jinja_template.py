@@ -13,8 +13,9 @@ class Jinja2TemplateProcessor(abc_temp.AbstractTemplate):
         for html_file in html_files:
             for find in re.findall(u'{[^}]+}', html_file.string_version):
                 if find.find('extends') > 0:
-                    for i in super().path_generator(html_file.path, self.template_check_helper(find)):
-                        base_names.append(i.__str__())
+                    if os.path.isfile(self.template_check_helper(find)) is False:
+                        for i in super().path_generator(html_file.path, self.template_check_helper(find)):
+                            base_names.append(i.__str__())
                 elif find.find('include') > 0:
                     if html_file.name in includes.keys():
                         includes[html_file.name] = includes[html_file.name] \
@@ -45,17 +46,25 @@ class Jinja2TemplateProcessor(abc_temp.AbstractTemplate):
             if html_file.base is False:
                 if html_file.string_version.find('{% extends') >= 0:
                     tmp = str()
-                    for i in super().path_generator(html_file.path, re.search(
-                            u'".*?"', re.search(u'{%.*?%}', html_file.string_version).group())
-                            .group().replace('"', '')):
-                        base_file = self.get_file_to_include(html_files, i.__str__())
+                    tmp_base_name = re.search(
+                        u'".*?"', re.search(u'{%.*?%}', html_file.string_version)
+                            .group()).group().replace('"', '')
+                    if os.path.isfile(tmp_base_name) is False:
+                        for i in super().path_generator(html_file.path, re.search(
+                                u'".*?"', re.search(u'{%.*?%}', html_file.string_version).group())
+                                .group().replace('"', '')):
+                            base_file = self.get_file_to_include(html_files, i.__str__())
+                            tmp = base_file.string_version
+                    else:
+                        base_file = self.get_file_to_include(html_files, tmp_base_name)
                         tmp = base_file.string_version
+
                     for find in re.findall(u'{%.*?%}', html_file.string_version):
                         if find.find('block') > 0 and find.find('endblock') == -1:
                             block_content = html_file.string_version[
-                                  html_file.string_version.find(find)+len(find):
-                                  html_file.string_version.find('{% endblock %}')
-                                  ]
+                                            html_file.string_version.find(find) + len(find):
+                                            html_file.string_version.find('{% endblock %}')
+                                            ]
                             html_file.string_version = html_file.string_version.replace('{% endblock %}', '', 1)
                             tmp = tmp.replace(find, block_content)
                     html_file.string_version = tmp

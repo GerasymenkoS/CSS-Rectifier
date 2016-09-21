@@ -27,9 +27,10 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
                         include = find.split(' ')
                         if len(include) != 1:
                             extention = include[1].rstrip()
-                            if os.path.basename(extention).find('*') == -1 \
+                            if os.path.basename(extention) == '*' \
                                     and os.path.basename(extention).find('.') == -1:
                                 extention += '.jade'
+
                             for path in super().path_generator(file.path, extention):
                                 included_file = self.get_file_to_include(
                                     html_with_jade_files, os.path.abspath(path.__str__())
@@ -91,7 +92,6 @@ class JadeTemplateProcessor(abstract_template.AbstractTemplate):
         for file in html_with_jade_files:
             if file.path == name_of_file:
                 return file
-
         print('Included file %s does not exist.' % name_of_file)
         exit()
 
