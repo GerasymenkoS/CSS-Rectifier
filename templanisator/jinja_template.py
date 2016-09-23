@@ -1,6 +1,7 @@
 import re
 import templanisator.abstract_template as abc_temp
 import os
+import files
 
 
 class Jinja2TemplateProcessor(abc_temp.AbstractTemplate):
@@ -35,10 +36,12 @@ class Jinja2TemplateProcessor(abc_temp.AbstractTemplate):
                                                                  find_include[
                                                                     find_include.find('"') + 1: find_include.rfind(
                                                                      '"')]):
-                if os.path.isfile(path.__str__()):
+                if os.path.isfile(os.path.realpath(path.__str__())):
                     base_file = self.get_file_to_include(name_of_file=os.path.realpath(path.__str__()))
-                    tmp = str()
+                    tmp = base_file.string_version
+                    if isinstance(html_file, files.JadeFile):
+                        html_file.string_version = html_file.string_version.replace('\n', '')
                     for block in re.findall(u'{% block .*? %}.*?{% endblock %}', html_file.string_version):
                         tmp = \
-                            base_file.string_version.replace(block[block.find('{%'):block.find('%}') + 2], block)
+                            tmp.replace(block[block.find('{%'):block.find('%}') + 2], block)
                     html_file.string_version = tmp
