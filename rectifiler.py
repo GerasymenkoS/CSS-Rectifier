@@ -209,9 +209,9 @@ class CSSRectifier:
                     self.html_files + [files.JadeFile(file.path) for file in self.get_some_files('jade')]
                 ).files
             elif template == "jsp":
-                self.html_files = jsp_.JSPTemplateProcessor().do_template_processor(
+                self.html_files = jsp_.JSPTemplateProcessor(
                     self.html_files + [files.JSPFile(file.path) for file in self.get_some_files('jsp')]
-                )
+                ).files
             else:
                 print('Enter correct Template Processor.')
                 exit()
