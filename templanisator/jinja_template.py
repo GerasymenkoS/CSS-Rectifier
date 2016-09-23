@@ -3,31 +3,22 @@ import templanisator.abstract_template as abc_temp
 import os
 
 
-class Jinja2TemplateProcessor:
+class Jinja2TemplateProcessor(abc_temp.AbstractTemplate):
     def __init__(self, html_files):
-        self.html_files = html_files
-        self.do_template_processor()
+        super().__init__(html_files)
 
     def do_template_processor(self):
-        for html_file in self.html_files:
+        for html_file in self.files:
             self.include(html_file)
             self.extends(html_file)
 
-        return self.html_files
-
-    def get_file_to_include(self, name_of_file):
-        for html_file in self.html_files:
-            if html_file.path == name_of_file:
-                return html_file
-        raise FileExistsError
+        return self.files
 
     def include(self, html_file):
         for find_include in re.findall(u'{% include [^}]+}', html_file.string_version):
             include_string = str()
-            for path in abc_temp.AbstractTemplate.path_generator(html_file.path,
-                                                                 find_include[
-                                                                     find_include.find('"') + 1:find_include.rfind(
-                                                                         '"')]):
+            for path in super().path_generator(html_file.path,
+                                               find_include[find_include.find('"') + 1:find_include.rfind('"')]):
                 if html_file.path == path.__str__():
                     continue
                 if os.path.isfile(path.__str__()):
