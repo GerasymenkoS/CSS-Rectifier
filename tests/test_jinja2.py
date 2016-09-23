@@ -9,7 +9,7 @@ class TestJinja2Processor(unittest.TestCase):
         import os
 
         files_to_jinja = []
-        for path in pathlib.Path(os.getcwd()).glob('test_jinja_project/templates/*'):
+        for path in pathlib.Path(os.getcwd()).glob('tests/test_jinja_project/templates/*'):
             if os.path.isfile(path.__str__()):
                 files_to_jinja.append(files.HTMLFile(path.__str__()))
             else:
