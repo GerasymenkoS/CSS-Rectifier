@@ -32,7 +32,7 @@ class JSPTemplateProcessor(abstract_template.AbstractTemplate):
                     html_file.string_version = html_file.string_version.replace(include_string,
                                                                                 include_strings)
         for file in html_files:
-            if re.search(u'<%@ include[^>]+%>', file.string_version):
+            if re.search(u'<%@[include][^>]+%>', file.string_version):
                 html_files = self.do_template_processor(html_files)
                 break
         return [html_file for html_file in html_files if html_file.name not in include_list]

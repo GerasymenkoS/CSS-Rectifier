@@ -45,7 +45,7 @@ class Jinja2TemplateProcessor:
                                                                     find_include.find('"') + 1: find_include.rfind(
                                                                      '"')]):
                 if os.path.isfile(path.__str__()):
-                    base_file = self.get_file_to_include(name_of_file=path.__str__())
+                    base_file = self.get_file_to_include(name_of_file=os.path.realpath(path.__str__()))
                     tmp = str()
                     for block in re.findall(u'{% block .*? %}.*?{% endblock %}', html_file.string_version):
                         tmp = \
