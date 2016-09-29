@@ -20,21 +20,6 @@ class MyFile:
         return 'File ' + self.name
 
 
-class CSSFile(MyFile):
-    def __init__(self, path, minified):
-        self.minified_version = minified
-        super().__init__(path)
-
-    def __str__(self):
-        return 'CSSFile ' + self.name
-
-    def __unicode__(self):
-        return 'CSSFile ' + self.name
-
-    def __repr__(self):
-        return 'CSSFile ' + self.name
-
-
 class WEBFile:
     def __init__(self):
         self.opened_and_closed_tags_check = False
@@ -65,6 +50,21 @@ class WEBFile:
 
     def check_string_version(self):
         pass
+
+
+class CSSFile(MyFile):
+    def __init__(self, path, minified):
+        self.minified_version = minified
+        super().__init__(path)
+
+    def __str__(self):
+        return 'CSSFile ' + self.name
+
+    def __unicode__(self):
+        return 'CSSFile ' + self.name
+
+    def __repr__(self):
+        return 'CSSFile ' + self.name
 
 
 class HTMLFile(MyFile, WEBFile):
