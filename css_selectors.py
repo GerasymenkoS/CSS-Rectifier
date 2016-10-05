@@ -116,18 +116,18 @@ class AloneCSSSelector:
 
     def __str__(self):
         if self.alone_usage:
-            return "AloneCSSSelector: '" + self.name + "' " + str(self.usage_files)
+            return "AloneCSSSelector: '" + self.name + "'  Usage files: " + str(self.usage_files)
         else:
             return "AloneCSSSelector: '" + self.name + "'"
 
     def __unicode__(self):
         if self.alone_usage:
-            return "AloneCSSSelector: '" + self.name + "' " + str(self.usage_files)
+            return "AloneCSSSelector: '" + self.name + "'  Usage files: " + str(self.usage_files)
         else:
             return "AloneCSSSelector: '" + self.name + "'"
 
     def __repr__(self):
         if self.alone_usage and len(self.usage_files) > 0:
-            return "AloneCSSSelector: '" + self.name + "' " + str(self.usage_files)
+            return "AloneCSSSelector: '" + self.name + "'  Usage files: " + str(self.usage_files)
         else:
             return "AloneCSSSelector: '" + self.name + "'"
