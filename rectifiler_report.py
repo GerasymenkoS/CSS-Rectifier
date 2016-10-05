@@ -29,7 +29,7 @@ class RectifilerReport:
             )
             self.create_report()
         except jinja2.TemplateNotFound:
-            print('Template not found. Programm close.')
+            print('Template not found. Program is closed.')
             exit()
 
     def create_report(self):
