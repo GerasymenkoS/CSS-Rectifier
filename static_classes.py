@@ -94,8 +94,7 @@ class Finder:
                     str_to_search = u'%s="[^"]+"' \
                                     % (problem_selector[1])
                     clean_find = re.search(str_to_search, find).group()[
-                                 len(problem_selector[1] + '="'):-1
-                                 ]
+                                 len(problem_selector[1] + '="'):-1]
                     for for_tilda in clean_find.split(' '):
                         if for_tilda == problem_selector[3][1:-1]:
                             if multiple is True:

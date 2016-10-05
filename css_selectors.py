@@ -91,7 +91,7 @@ class CSSSelector:
         with open(file.path, 'r+') as f:
             for line in f:
                 if line.find(self.name) >= 0 and line.find('{') > 0:
-                    self.lines.append((index, file))
+                    self.lines.append((index, file.name))
                 index += 1
 
     def __str__(self):
