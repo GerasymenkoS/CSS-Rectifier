@@ -87,12 +87,12 @@ class CSSSelector:
         return False
 
     def add_line(self, file):
-        index = 1
+        line_number = 1
         with open(file.path, 'r+') as f:
             for line in f:
                 if line.find(self.name) >= 0 and line.find('{') > 0:
-                    self.lines.append((index, file.name))
-                index += 1
+                    self.lines.append((line_number, file.name))
+                line_number += 1
 
     def __str__(self):
         return "CSSSelector: '" + self.name + "'"
